@@ -9,7 +9,7 @@ type Props = {
 };
 
 function WebField() {
-  const group = useRef<THREE.Group>(null!);
+  const group = useRef<THREE.Group | null>(null);
 
   const geometry = useMemo(() => {
     const vertexCount = 420;
@@ -34,10 +34,20 @@ function WebField() {
 
   useEffect(() => {
     if (!group.current) return;
-    while (group.current.children.length) group.current.remove(group.current.children[0]);
 
-    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const isMobile = window.matchMedia("(max-width: 767px)").matches;
+    // Clear existing children
+    while (group.current.children.length) {
+      group.current.remove(group.current.children[0]);
+    }
+
+    const prefersReduced =
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    const isMobile =
+      typeof window !== "undefined" &&
+      window.matchMedia("(max-width: 767px)").matches;
+
     const COUNT = prefersReduced ? 0 : isMobile ? 16 : 30;
 
     for (let i = 0; i < COUNT; i++) {
@@ -49,9 +59,12 @@ function WebField() {
     }
 
     return () => {
+      if (!group.current) return;
+      while (group.current.children.length) {
+        group.current.remove(group.current.children[0]);
+      }
       geometry.dispose();
       material.dispose();
-      if (group.current) while (group.current.children.length) group.current.remove(group.current.children[0]);
     };
   }, [geometry, material]);
 
@@ -66,21 +79,33 @@ function WebField() {
 }
 
 export default function HeroBackground({ eventSource }: Props) {
-  // only mount Canvas when we have a real HTMLElement ref
   const [sourceEl, setSourceEl] = useState<HTMLElement | null>(null);
-  useEffect(() => setSourceEl(eventSource.current), [eventSource]);
+  const [dpr, setDpr] = useState<[number, number]>([1, 1]);
 
-  // Respect reduced motion
-  if (typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) {
+  useEffect(() => {
+    setSourceEl(eventSource.current ?? null);
+  }, [eventSource]);
+
+  // Set DPR on client only (avoids window usage during SSR)
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setDpr([1, Math.min(2, window.devicePixelRatio || 1)]);
+    }
+  }, []);
+
+  // Respect reduced motion (guarded for SSR)
+  if (
+    typeof window !== "undefined" &&
+    window.matchMedia?.("(prefers-reduced-motion: reduce)").matches
+  ) {
     return null;
   }
 
   return (
     <div className="absolute inset-0 z-0">
-      {/* eventPrefix='client' lets R3F read clientX/clientY from the bound element */}
       <Canvas
         camera={{ position: [0, 0, 8], fov: 60 }}
-        dpr={[1, Math.min(2, window.devicePixelRatio || 1)]}
+        dpr={dpr}
         eventSource={sourceEl ?? undefined}
         eventPrefix="client"
       >
