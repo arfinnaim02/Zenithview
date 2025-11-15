@@ -2,6 +2,7 @@
 
 import { Canvas, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
+import type { Group } from "three";
 import { RefObject, useEffect, useMemo, useRef, useState } from "react";
 
 type Props = {
@@ -9,7 +10,7 @@ type Props = {
 };
 
 function WebField() {
-  const group = useRef<THREE.Group | null>(null);
+  const group = useRef<Group | null>(null);
 
   const geometry = useMemo(() => {
     const vertexCount = 420;
@@ -86,14 +87,12 @@ export default function HeroBackground({ eventSource }: Props) {
     setSourceEl(eventSource.current ?? null);
   }, [eventSource]);
 
-  // Set DPR on client only (avoids window usage during SSR)
   useEffect(() => {
     if (typeof window !== "undefined") {
       setDpr([1, Math.min(2, window.devicePixelRatio || 1)]);
     }
   }, []);
 
-  // Respect reduced motion (guarded for SSR)
   if (
     typeof window !== "undefined" &&
     window.matchMedia?.("(prefers-reduced-motion: reduce)").matches
