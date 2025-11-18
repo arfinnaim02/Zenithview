@@ -146,7 +146,7 @@ export default function ServiceDetailPage({ params }: { params: Params }) {
           </div>
         </div>
 
-      {/* Decorative orbs */}
+        {/* Decorative orbs */}
         <div className="absolute -top-20 -right-14 h-56 w-56 rounded-full orb bg-neon/30" />
         <div className="absolute -bottom-20 -left-14 h-64 w-64 rounded-full orb bg-violet/25" />
       </header>
@@ -246,9 +246,7 @@ export default function ServiceDetailPage({ params }: { params: Params }) {
                   View Live Demo
                 </a>
               )}
-              <CalendlyPopupButton className="btn-neon text-center w-full">
-                Book a Call
-              </CalendlyPopupButton>
+              <CalendlyPopupButton className="btn-neon text-center w-full" />
               {primaryCaseStudy && (
                 <Link
                   href={`/portfolio/${primaryCaseStudy.slug}`}
