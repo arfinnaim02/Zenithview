@@ -7,10 +7,16 @@ export type Service = {
   solution: string;
   deliverables: string[];
   techStack: string[];
-  pricing: { name: string; description?: string; price?: string; features?: string[] }[];
+  pricing: {
+    name: string;
+    description?: string;
+    price?: string;
+    features?: string[];
+  }[];
   faq: { question: string; answer: string }[];
   caseStudies: { title: string; slug: string }[];
   tags?: string[];
+  demoUrl?: string;
 };
 
 export const services: Service[] = [
@@ -18,7 +24,8 @@ export const services: Service[] = [
     title: "Data Scraping Based on Client Criteria",
     slug: "data-scraping",
     tagline: "Reliable, targeted data extraction from the sources that matter to you.",
-    problem: "You need clean, structured data from multiple sources, on a schedule, with quality checks.",
+    problem:
+      "You need clean, structured data from multiple sources, on a schedule, with quality checks.",
     solution:
       "We design robust scrapers with proxy rotation, headless browsers and validation to deliver fresh, deduplicated datasets.",
     deliverables: [
@@ -28,7 +35,14 @@ export const services: Service[] = [
       "CSV/JSON/DB delivery + schedule",
       "Monitoring & failover alerts",
     ],
-    techStack: ["Playwright/Puppeteer", "Node.js", "Python", "Proxies", "Supabase/Postgres", "S3/Blob"],
+    techStack: [
+      "Playwright/Puppeteer",
+      "Node.js",
+      "Python",
+      "Proxies",
+      "Supabase/Postgres",
+      "S3/Blob",
+    ],
     pricing: [
       {
         name: "Starter",
@@ -50,10 +64,20 @@ export const services: Service[] = [
       },
     ],
     faq: [
-      { question: "Is scraping legal?", answer: "We comply with robots.txt and applicable laws. We avoid login-gated sources unless you provide explicit permissions." },
+      {
+        question: "Is scraping legal?",
+        answer:
+          "We comply with robots.txt and applicable laws. We avoid login-gated sources unless you provide explicit permissions.",
+      },
     ],
-    caseStudies: [{ title: "Retail price tracker", slug: "retail-price-tracker" }],
+    caseStudies: [
+      {
+        title: "Scalable Data Scraping",
+        slug: "data-scraping-case",
+      },
+    ],
     tags: ["Data", "Scraping"],
+    demoUrl: "https://demo.zenithview.com/data-scraping",
   },
 
   {
@@ -71,8 +95,14 @@ export const services: Service[] = [
       { name: "Enterprise", price: "Custom", features: ["Row-level security", "SSO", "SLA"] },
     ],
     faq: [],
-    caseStudies: [{ title: "Marketing performance cockpit", slug: "marketing-performance-cockpit" }],
+    caseStudies: [
+      {
+        title: "Real-Time Analytics Dashboards",
+        slug: "data-analytics-visualization-case",
+      },
+    ],
     tags: ["Analytics", "Dashboards"],
+    demoUrl: "https://demo.zenithview.com/data-analytics-visualization",
   },
 
   {
@@ -89,8 +119,14 @@ export const services: Service[] = [
       { name: "App", price: "Custom", features: ["Auth", "DB", "APIs", "Observability"] },
     ],
     faq: [],
-    caseStudies: [{ title: "High-converting SaaS site", slug: "saas-site" }],
+    caseStudies: [
+      {
+        title: "Modern Web Platform",
+        slug: "web-development-case",
+      },
+    ],
     tags: ["Web", "Frontend"],
+    demoUrl: "https://demo.zenithview.com/web-development",
   },
 
   {
@@ -107,8 +143,14 @@ export const services: Service[] = [
       { name: "On-going", price: "$1,000/mo", features: ["Monthly assets", "Priority queue"] },
     ],
     faq: [],
-    caseStudies: [{ title: "Brand refresh", slug: "brand-refresh" }],
+    caseStudies: [
+      {
+        title: "Brand Identity Refresh",
+        slug: "graphics-design-case",
+      },
+    ],
     tags: ["Design"],
+    demoUrl: "https://demo.zenithview.com/graphics-design",
   },
 
   {
@@ -125,8 +167,14 @@ export const services: Service[] = [
       { name: "Retainer", price: "Custom", features: ["Monthly batch", "Priority queue"] },
     ],
     faq: [],
-    caseStudies: [{ title: "Product explainers", slug: "product-explainers" }],
+    caseStudies: [
+      {
+        title: "Video Marketing Enhancement",
+        slug: "video-post-production-case",
+      },
+    ],
     tags: ["Video"],
+    demoUrl: "https://demo.zenithview.com/video-post-production",
   },
 
   {
@@ -143,27 +191,107 @@ export const services: Service[] = [
       { name: "Enterprise", price: "Custom", features: ["SOC2 patterns", "LLM observability"] },
     ],
     faq: [],
-    caseStudies: [{ title: "Support automation", slug: "support-automation" }],
+    caseStudies: [
+      {
+        title: "Operational AI Automation",
+        slug: "ai-automation-case",
+      },
+    ],
     tags: ["AI", "Automation"],
+    demoUrl: "https://demo.zenithview.com/ai-automation",
   },
 
-  {
-    title: "Facebook Competitor Watchdog",
-    slug: "facebook-competitor-watchdog",
-    tagline: "Track competitor ads, creatives and messaging daily.",
-    problem: "Hard to see how competitors spend and evolve creative.",
-    solution: "We aggregate ad library data into alerts, trends and creative boards.",
-    deliverables: ["Competitor list", "Ad ingestion", "Dashboards", "Alerts & reports"],
-    techStack: ["Meta Ad Library", "Python/Node", "DB", "Recharts"],
-    pricing: [
-      { name: "Starter", price: "$900", features: ["3 competitors", "Weekly report"] },
-      { name: "Growth", price: "$2,200", features: ["10 competitors", "Daily alerts"] },
-      { name: "Enterprise", price: "Custom", features: ["Unlimited", "API access"] },
-    ],
-    faq: [],
-    caseStudies: [{ title: "D2C creative radar", slug: "d2c-creative-radar" }],
-    tags: ["Watchdog", "Marketing"],
-  },
+{
+  title: "Facebook Competitor Watchdog",
+  slug: "facebook-competitor-watchdog",
+  tagline: "Real-time competitor ad intelligence — creatives, spend signals, and messaging trends.",
+  
+  problem:
+    "Teams manually check the Meta Ad Library, screenshot ads, and lose information in scattered Slack threads and Notion pages. There is no historical tracking, no automated alerts, and no way to see which competitors are increasing spend or what creative angles they are testing. As a result, creative strategy becomes reactive and guess-based instead of data-driven.",
+
+  solution:
+    "Our Watchdog system continuously monitors competitors inside the Meta Ad Library, captures every creative variation, classifies hooks and formats, and generates actionable insights. You get a live dashboard, weekly intelligence summaries, creative trends, and alerts whenever a competitor increases spend or drops a new batch of ads.",
+
+  deliverables: [
+    "Competitor list setup",
+    "Real-time Meta Ad Library ingestion",
+    "Creative tagging (hooks, formats, angles)",
+    "Historical archive of competitor ads",
+    "Trend dashboards & creative volume charts",
+    "Daily/Weekly alert reports"
+  ],
+
+  techStack: [
+    "Meta Ad Library API",
+    "Playwright / Puppeteer (fallback)",
+    "Python / Node.js",
+    "PostgreSQL / Prisma",
+    "Next.js Dashboard",
+    "Recharts / D3 Visualizations"
+  ],
+
+  pricing: [
+    {
+      name: "Free",
+      price: "$0.00",
+      features: [
+        "Track 3 competitors",
+        "Weekly insight summaries",
+        "Basic creative archive"
+      ]
+    },
+    {
+      name: "Growth",
+      price: "$5.00",
+      features: [
+        "Track 10 competitors",
+        "Daily alerts on new creatives",
+        "Creative tagging (hooks / formats)",
+        "Trend dashboards"
+      ]
+    },
+    {
+      name: "Enterprise",
+      price: "$20.00",
+      features: [
+        "Unlimited competitors",
+        "Spend pattern intelligence",
+        "API access",
+        "Custom dashboards & Slack alerts"
+      ]
+    }
+  ],
+
+  faq: [
+    {
+      question: "How often does the Watchdog scan competitor ads?",
+      answer:
+        "Depending on the plan, the system scans competitors daily or weekly, capturing all changes and storing historical versions."
+    },
+    {
+      question: "Can it detect competitor spend?",
+      answer:
+        "Meta does not expose exact spend, but Watchdog uses creative frequency, rollout patterns, and ad burst behavior to estimate spend intensity."
+    },
+    {
+      question: "Do I need API access from Meta?",
+      answer:
+        "No. We use a compliant combination of Meta’s public Ad Library search endpoints and safe automation fallbacks."
+    }
+  ],
+
+  caseStudies: [
+    {
+      title: "Ad Intelligence Watchdog",
+      slug: "facebook-competitor-watchdog-case"
+    }
+  ],
+
+  tags: ["Watchdog", "Marketing", "Ad Intelligence", "Competitive Research"],
+
+  demoUrl: "https://ad-analyzer-3dwj.onrender.com/"
+},
+
 
   {
     title: "E-Commerce Package",
@@ -179,8 +307,14 @@ export const services: Service[] = [
       { name: "Custom", price: "Custom", features: ["Headless", "Complex ops"] },
     ],
     faq: [],
-    caseStudies: [{ title: "Headless store", slug: "headless-store" }],
+    caseStudies: [
+      {
+        title: "E-Commerce Transformation",
+        slug: "ecommerce-package-case",
+      },
+    ],
     tags: ["E-Commerce"],
+    demoUrl: "https://demo.zenithview.com/ecommerce-package",
   },
 
   {
@@ -197,8 +331,14 @@ export const services: Service[] = [
       { name: "Manage", price: "$150/mo", features: ["Admin & support", "Policies"] },
     ],
     faq: [],
-    caseStudies: [{ title: "Deliverability lift", slug: "deliverability-lift" }],
+    caseStudies: [
+      {
+        title: "Enterprise Email Overhaul",
+        slug: "business-email-solutions-case",
+      },
+    ],
     tags: ["Email", "IT"],
+    demoUrl: "https://demo.zenithview.com/business-email-solutions",
   },
 
   {
@@ -211,7 +351,13 @@ export const services: Service[] = [
     techStack: ["As needed"],
     pricing: [{ name: "PoC", price: "$2,000", features: ["2-week sprint", "Demo & docs"] }],
     faq: [],
-    caseStudies: [],
+    caseStudies: [
+      {
+        title: "Custom Solution PoC",
+        slug: "custom-build-case",
+      },
+    ],
     tags: ["Custom"],
+    demoUrl: "https://demo.zenithview.com/client-criteria",
   },
 ];

@@ -5,6 +5,7 @@ import { services } from "@/lib/services";
 import Timeline from "@/components/Timeline";
 import Accordion from "@/components/Accordion";
 import CaseSlider from "@/components/CaseSlider";
+import CalendlyPopupButton from "@/components/CalendlyPopupButton";
 
 type Params = { slug: string };
 
@@ -38,18 +39,15 @@ export default function ServiceDetailPage({ params }: { params: Params }) {
   const svc = services.find((s) => s.slug === params.slug);
   if (!svc) notFound();
 
-  // Defensive fallbacks
   const deliverables: string[] = Array.isArray(svc!.deliverables) ? svc!.deliverables : [];
   const techStack: string[] = Array.isArray(svc!.techStack) ? svc!.techStack : [];
   const pricing:
-    | { name: string; description?: string; price?: string; features?: string[] }[]
-    = Array.isArray(svc!.pricing) ? svc!.pricing : [];
-  const faq:
-    | { question: string; answer: string }[]
-    = Array.isArray(svc!.faq) ? svc!.faq : [];
-  const caseStudies:
-    | { title: string; slug: string }[]
-    = Array.isArray(svc!.caseStudies) ? svc!.caseStudies : [];
+    | { name: string; description?: string; price?: string; features?: string[] }[] =
+    Array.isArray(svc!.pricing) ? svc!.pricing : [];
+  const faq: { question: string; answer: string }[] = Array.isArray(svc!.faq) ? svc!.faq : [];
+  const caseStudies: { title: string; slug: string }[] = Array.isArray(svc!.caseStudies)
+    ? svc!.caseStudies
+    : [];
   const tags: string[] = Array.isArray((svc as any).tags) ? (svc as any).tags : [];
 
   const timelineSteps = deliverables.map((item, index) => ({
@@ -58,8 +56,11 @@ export default function ServiceDetailPage({ params }: { params: Params }) {
     description: "",
   }));
 
+  const hasDemo = Boolean(svc.demoUrl);
+  const primaryCaseStudy = caseStudies.length > 0 ? caseStudies[0] : null;
+
   // JSON-LD for SEO
-  const jsonLd = {
+  const jsonLd: any = {
     "@context": "https://schema.org",
     "@type": "Service",
     name: svc!.title,
@@ -83,13 +84,25 @@ export default function ServiceDetailPage({ params }: { params: Params }) {
         : undefined,
   };
 
+  if (svc.demoUrl) {
+    jsonLd.hasPart = {
+      "@type": "CreativeWork",
+      name: `${svc.title} live demo`,
+      url: svc.demoUrl,
+    };
+  }
+
   return (
     <div className="max-w-6xl mx-auto px-4 py-10 md:py-20">
       {/* Breadcrumbs */}
       <nav className="mb-6 text-sm text-gray-400">
-        <Link href="/" className="hover:text-white">Home</Link>
+        <Link href="/" className="hover:text-white">
+          Home
+        </Link>
         <span className="mx-2 opacity-60">/</span>
-        <Link href="/services" className="hover:text-white">Services</Link>
+        <Link href="/services" className="hover:text-white">
+          Services
+        </Link>
         <span className="mx-2 opacity-60">/</span>
         <span className="text-white">{svc!.title}</span>
       </nav>
@@ -99,29 +112,41 @@ export default function ServiceDetailPage({ params }: { params: Params }) {
         <div className="relative z-10">
           <div className="flex flex-wrap items-center gap-2 mb-4">
             {tags.map((t) => (
-              <span key={t} className="text-xs px-2 py-1 rounded-md border border-white/10 text-gray-300">
+              <span
+                key={t}
+                className="text-xs px-2 py-1 rounded-md border border-white/10 text-gray-300"
+              >
                 {t}
               </span>
             ))}
           </div>
           <h1 className="font-heading text-3xl md:text-5xl text-neon mb-3">{svc!.title}</h1>
           {svc!.tagline && (
-            <p className="text-lg md:text-2xl text-gray-300 max-w-3xl">
-              {svc!.tagline}
-            </p>
+            <p className="text-lg md:text-2xl text-gray-300 max-w-3xl">{svc!.tagline}</p>
           )}
           <div className="mt-6 flex flex-wrap gap-3">
-            <a href="/contact" className="btn-neon">Request Consultation</a>
-            <Link
-              href="/portfolio"
-              className="btn-neon bg-transparent border border-neon text-neon hover:bg-neon/10"
-            >
-              See Case Studies
-            </Link>
+            {hasDemo && (
+              <a
+                href={svc.demoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-neon"
+              >
+                View Live Demo
+              </a>
+            )}
+            {primaryCaseStudy && (
+              <Link
+                href={`/portfolio/${primaryCaseStudy.slug}`}
+                className="btn-neon bg-transparent border border-neon text-neon hover:bg-neon/10"
+              >
+                See Case Studies
+              </Link>
+            )}
           </div>
         </div>
 
-        {/* Decorative orbs */}
+      {/* Decorative orbs */}
         <div className="absolute -top-20 -right-14 h-56 w-56 rounded-full orb bg-neon/30" />
         <div className="absolute -bottom-20 -left-14 h-64 w-64 rounded-full orb bg-violet/25" />
       </header>
@@ -172,7 +197,10 @@ export default function ServiceDetailPage({ params }: { params: Params }) {
               <h3 className="font-heading text-2xl mb-4 text-neon">Pricing</h3>
               <div className="grid md:grid-cols-3 gap-6">
                 {pricing.map((tier, idx) => (
-                  <div key={idx} className="p-6 border border-white/10 rounded-2xl bg-base/80 card-border">
+                  <div
+                    key={idx}
+                    className="p-6 border border-white/10 rounded-2xl bg-base/80 card-border"
+                  >
                     <h4 className="font-heading text-xl text-neon mb-1">{tier.name}</h4>
                     {tier.description && (
                       <p className="text-gray-400 mb-3 text-sm">{tier.description}</p>
@@ -201,20 +229,6 @@ export default function ServiceDetailPage({ params }: { params: Params }) {
               <Accordion items={faq} />
             </section>
           )}
-
-          {/* Related case studies */}
-          {caseStudies.length > 0 && (
-            <section>
-              <h3 className="font-heading text-2xl mb-4 text-neon">Related Case Studies</h3>
-              <CaseSlider
-                items={caseStudies.map((cs) => ({
-                  title: cs.title,
-                  slug: cs.slug,
-                  image: `/case-studies/${cs.slug.replace(/-/g, "_")}.png`,
-                }))}
-              />
-            </section>
-          )}
         </main>
 
         {/* Sticky side rail */}
@@ -222,19 +236,27 @@ export default function ServiceDetailPage({ params }: { params: Params }) {
           <div className="p-5 rounded-2xl border border-white/10 bg-base/80">
             <h4 className="font-heading text-lg mb-2 text-neon">Quick actions</h4>
             <div className="flex flex-col gap-3">
-              <a href="/contact" className="btn-neon text-center">Book a Call</a>
-              <Link
-                href="/pricing"
-                className="btn-neon bg-transparent border border-neon text-neon hover:bg-neon/10 text-center"
-              >
-                View Pricing
-              </Link>
-              <Link
-                href="/portfolio"
-                className="btn-neon bg-transparent border border-neon text-neon hover:bg-neon/10 text-center"
-              >
-                See Portfolio
-              </Link>
+              {hasDemo && (
+                <a
+                  href={svc.demoUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-neon text-center"
+                >
+                  View Live Demo
+                </a>
+              )}
+              <CalendlyPopupButton className="btn-neon text-center w-full">
+                Book a Call
+              </CalendlyPopupButton>
+              {primaryCaseStudy && (
+                <Link
+                  href={`/portfolio/${primaryCaseStudy.slug}`}
+                  className="btn-neon bg-transparent border border-neon text-neon hover:bg-neon/10 text-center"
+                >
+                  See Portfolio
+                </Link>
+              )}
             </div>
           </div>
           <div className="p-5 rounded-2xl border border-white/10 bg-base/70">

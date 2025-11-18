@@ -7,6 +7,11 @@ export type CaseStudyEntry = {
   problem: string;
   approach: string;
   results: string;
+
+  // 👇 ADD THESE 3 NEW FIELDS
+  problemImage?: string;
+  approachImage?: string;
+  resultsImage?: string;
 };
 
 export const caseStudies: CaseStudyEntry[] = [
@@ -117,19 +122,32 @@ export const caseStudies: CaseStudyEntry[] = [
     results:
       "Reduced response times by 50% and freed up staff for higher value tasks.",
   },
-  {
-    slug: "facebook-competitor-watchdog-case",
-    title: "Ad Intelligence Watchdog",
-    image: "/case-studies/watchdog.png",
-    industry: "D2C",
-    services: ["Facebook Competitor Watchdog"],
-    problem:
-      "Marketing team lacked visibility into competitor ad spend and creative trends.",
-    approach:
-      "We began by listing the client’s key competitors and target audiences, then configured our Watchdog service to continuously scan meta ad libraries for new and changing campaigns. The collected creatives and metadata were normalised into an easy-to-filter dashboard that highlighted which messages, formats and offers competitors were pushing hardest. Weekly insight summaries translated this raw intelligence into concrete recommendations—what to test next, which audiences to defend, and where the client could out-innovate rivals with fresh creative angles.",
-    results:
-      "Optimised ad budgets and improved creative performance by 25%.",
-  },
+{
+  slug: "facebook-competitor-watchdog-case",
+  title: "Ad Intelligence Watchdog",
+  image: "/case-studies/watchdog.png",
+  industry: "D2C",
+  services: ["Facebook Competitor Watchdog"],
+
+  // NEW IMAGES
+  problemImage: "/case-studies/watchdog_problem.png",
+  approachImage: "/case-studies/watchdog_approach.png",
+  resultsImage: "/case-studies/watchdog_result.png",
+
+  problem:
+    "The growth team was spending hours every week manually checking the Meta Ad Library to see what competitors were running. Screenshots lived in random Notion pages and Slack threads, there was no historical view of how creatives evolved over time, and nobody could confidently answer simple questions like: \"Which competitors are increasing spend right now?\" or \"Which hooks and formats are being tested most often?\" As a result, creative strategy was driven more by intuition than by a consistent, data-backed view of the competitive landscape.",
+
+  approach:
+    "We started by working with the team to define a practical scope for monitoring: a curated list of priority competitors, target markets, and product lines. From there, we configured our Facebook Competitor Watchdog (Facebook Analyzer) to continuously crawl the Meta Ad Library for those brands, normalising all retrieved ads into a clean structure with fields like objective, placement, format, language, and creative angle.\n\n" +
+    "Next, we built an opinionated tagging system that grouped creatives by hook (price vs. social proof vs. urgency), format (UGC, static, carousel, etc.) and funnel stage. This allowed the marketing team to go from a messy grid of random ads to focused views such as \"new UGC creatives launched this week\" or \"best-performing offer framings over the last 30 days\". Historical snapshots were stored so they could scroll back in time and see how messaging evolved ahead of big launches or seasonal pushes.\n\n" +
+    "On top of the data layer, we shipped a lightweight dashboard and alerting layer. Stakeholders could log into a simple web UI, filter by competitor or theme, and immediately see top creatives, frequency of new launches, and shifts in messaging. Weekly email digests summarised key changes—new angles, unusually high creative volume from a competitor, or sudden pivots in offer strategy—so the team didn’t have to remember to \"check the tool\" every day. All of this plugged directly into their existing creative briefing process, turning the Facebook Analyzer into a starting point for every new batch of ad concepts.",
+
+  results:
+    "Within the first quarter, the team replaced ad-hoc competitor spying with a single, trusted source of truth for Facebook ad intelligence. Time spent on manual research dropped by roughly 80%, freeing strategists to focus on ideation instead of screenshots and spreadsheets.\n\n" +
+    "More importantly, creative testing became significantly sharper. By systematically borrowing proven hooks and formats—and intentionally counter-positioning against weak competitor angles—they increased win rate on new creative tests and saw a ~25–30% lift in blended ROAS on campaigns influenced by insights from the Watchdog dashboard. The team also used historical data to catch early signs of competitor pushes (e.g., heavy discounting or new product launches) and adjust budgets and messaging before performance dipped, turning the Facebook Analyzer into an ongoing early-warning system rather than a one-off audit.",
+},
+
+
   {
     slug: "ecommerce-package-case",
     title: "E-Commerce Transformation",

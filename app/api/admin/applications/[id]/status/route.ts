@@ -3,7 +3,16 @@ import { createClient } from "@supabase/supabase-js";
 
 export const dynamic = "force-dynamic";
 
-const VALID_STATUSES = ["new", "contacted", "interview", "hired", "rejected"];
+// ✅ Allow the new statuses as well
+const VALID_STATUSES = [
+  "new",
+  "contacted",
+  "interview",
+  "hired",
+  "rejected",
+  "shortlisted",
+  "task_sent",
+];
 
 /**
  * PATCH /api/admin/applications/[id]/status
